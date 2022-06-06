@@ -6,7 +6,7 @@ const Player = ({ accessToken, trackUri }) => {
   const [play, setPlay] = useState(false);
 
   useEffect(() => {
-    setPlay(true);
+    setPlay(trackUri !== null);
   }, [trackUri]);
 
   if (!accessToken) return null;

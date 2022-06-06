@@ -10,7 +10,9 @@ import {
   ArtistTitleInput,
   ResultsContainer,
   PlayerContainer,
-  Button
+  Button,
+  PageFooter,
+  StatusMessage
 } from './styles/Dashboard.styles';
 
 const spotifyApi = new SpotifyWebApi({
@@ -23,20 +25,40 @@ const Dashboard = ({ code }) => {
   const [playlistName, setPlaylistName] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [playingTrack, setPlayingTrack] = useState();
+  const [statusMessage, setStatusMessage] = useState('');
 
   function chooseTrack(track) {
     setPlayingTrack(track);
   }
+
+  const createSpotifyPlaylist = () => {
+    (async () => {
+      const { body } = await spotifyApi.createPlaylist(playlistName);
+      const tracks = searchResults.map(result => {
+        return result[0].uri;
+      });
+      await spotifyApi.addTracksToPlaylist(body.id, tracks);
+      setStatusMessage(`Playlist ${playlistName} created.`);
+    })();
+    setPlaylistName('');
+  };
 
   useEffect(() => {
     if (!accessToken) return;
     spotifyApi.setAccessToken(accessToken);
   }, [accessToken]);
 
+  useEffect(() => {
+    setSearchResults([]);
+    setPlayingTrack(null);
+    setStatusMessage('');
+  }, [artistTitleText]);
+
   const searchTitles = () => {
     if (!artistTitleText) return setSearchResults([]);
     if (!accessToken) return;
 
+    setPlayingTrack(null);
     let cancel = false;
     (async () => {
       var searchLines = artistTitleText.split('\n');
@@ -60,6 +82,7 @@ const Dashboard = ({ code }) => {
         }
       }
       setSearchResults(searchResultsForLines);
+      setStatusMessage(`${searchResultsForLines.length} titles found`);
     })();
 
     return () => (cancel = true);
@@ -68,19 +91,20 @@ const Dashboard = ({ code }) => {
   return (
     <DashBoardContainer>
       <h1>Create Spotify Playlist from Titles</h1>
-      <p>
-        <ArtistTitleInput
-          name="artistTitleInput"
-          placeholder="Search Songs/Artists"
-          value={artistTitleText}
-          rows={15}
-          cols={80}
-          onChange={e => setArtistTitleText(e.target.value)}
-        />
-      </p>
-      <p>
-        <Button onClick={searchTitles}>Search Songs</Button>
-      </p>
+      <ArtistTitleInput
+        name="artistTitleInput"
+        placeholder="Lines with Artist - Title"
+        value={artistTitleText}
+        rows={15}
+        cols={80}
+        onChange={e => setArtistTitleText(e.target.value)}
+      />
+      <Button
+        onClick={searchTitles}
+        disabled={artistTitleText.trim().length === 0}
+      >
+        Search Songs
+      </Button>
       <ResultsContainer>
         {searchResults.map(track => (
           <TrackSearchResult
@@ -91,11 +115,23 @@ const Dashboard = ({ code }) => {
         ))}
       </ResultsContainer>
       <PlaylistNameInput
-        type="search"
+        type="text"
         placeholder="Enter Spotify Playlist Name"
         value={playlistName}
+        hidden={searchResults.length === 0}
         onChange={e => setPlaylistName(e.target.value)}
       />
+      <Button
+        onClick={createSpotifyPlaylist}
+        disabled={
+          searchResults.lastIndexOf === 0 || playlistName.trim().length === 0
+        }
+      >
+        Create Spotify Playlist
+      </Button>
+      <p />
+      <StatusMessage>{statusMessage}</StatusMessage>
+      <PageFooter />
       <PlayerContainer>
         <Player accessToken={accessToken} trackUri={playingTrack?.uri} />
       </PlayerContainer>

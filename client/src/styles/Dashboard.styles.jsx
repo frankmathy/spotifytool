@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const DashBoardContainer = styled.div`
-  padding: 2rem;
+  padding: 1rem;
   min-height: 100vh;
   width: 100%;
 `;
@@ -42,16 +42,8 @@ export const SearchInput = styled.input`
 
 export const ResultsContainer = styled.div`
   flex-grow: 1;
-  margin: 3rem 0;
   overflow-y: auto;
   overflow-x: auto;
-`;
-
-export const LyricsContainer = styled.div`
-  height: 65vh;
-  text-align: center;
-  color: #fff;
-  white-space: pre;
 `;
 
 export const PlayerContainer = styled.div`
@@ -60,6 +52,13 @@ export const PlayerContainer = styled.div`
   bottom: 0;
   left: 0;
 `;
+
+export const StatusMessage = styled.a`
+  font-size: 1rem;
+  color: green;
+`;
+
+export const BottomContainer = styled.div``;
 
 export const Button = styled.button`
   background-color: #3f51b5;
@@ -81,4 +80,8 @@ export const Button = styled.button`
     cursor: default;
     opacity: 0.7;
   }
+`;
+
+export const PageFooter = styled.div`
+  margin: 5rem;
 `;
