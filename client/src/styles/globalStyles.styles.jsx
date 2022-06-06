@@ -14,6 +14,10 @@ a {
   text-decoration: none;
 }
 
+h1 {
+  color: white
+}
+
 * {
   box-sizing: border-box;
 }
