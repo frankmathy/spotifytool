@@ -31,6 +31,21 @@ const Dashboard = ({ code }) => {
     setPlayingTrack(track);
   }
 
+  const convertFrom2Liners = () => {
+    var searchLines = artistTitleText.split('\n');
+    const filteredLines = searchLines.filter(line => line.trim().length > 0);
+    var result = '';
+    var lineCount = 0;
+    filteredLines.forEach(line => {
+      if (lineCount++ % 2 === 0) {
+        result += line;
+      } else {
+        result += ' - ' + line + '\n';
+      }
+    });
+    setArtistTitleText(result);
+  };
+
   const createSpotifyPlaylist = () => {
     (async () => {
       const { body } = await spotifyApi.createPlaylist(playlistName);
@@ -104,6 +119,20 @@ const Dashboard = ({ code }) => {
         disabled={artistTitleText.trim().length === 0}
       >
         Search Songs
+      </Button>
+      <Button
+        onClick={() => {
+          setArtistTitleText('');
+        }}
+        disabled={artistTitleText.trim().length === 0}
+      >
+        Clear
+      </Button>
+      <Button
+        onClick={convertFrom2Liners}
+        disabled={artistTitleText.trim().length === 0}
+      >
+        2 Liners
       </Button>
       <ResultsContainer>
         {searchResults.map(track => (
