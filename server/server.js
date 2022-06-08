@@ -1,30 +1,27 @@
-import express from 'express';
-import path from 'path';
-import cors from 'cors';
-import SpotifyWebApi from 'spotify-web-api-node';
-import dotenv from 'dotenv';
+const path = require('path');
+const express = require('express');
+const cors = require('cors');
+const SpotifyWebApi = require('spotify-web-api-node');
+const dotenv = require('dotenv').config();
+const PORT = process.env.PORT || 3001;
 
 const app = express();
-dotenv.config();
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(
-    express.static(express.static(path.join(__dirname, '../client/build')))
-  );
+  app.use(express.static(path.join(__dirname, '../client/build')));
+
   app.get('*', (req, res) =>
     res.sendFile(
-      path.resolve(__dirname, '../', 'frontend', 'build', 'index.html')
+      path.resolve(__dirname, '../', 'client', 'build', 'index.html  ')
     )
   );
 } else {
   app.get('/', (req, res) => res.send('Please set to production'));
 }
-
-const PORT = 3001;
 
 app.post('/login', async (req, res) => {
   const { code } = req.body;
@@ -67,5 +64,5 @@ app.post('/refresh', async (req, res) => {
 
 app.listen(PORT, err => {
   if (err) console.log(err);
-  console.log('Listening on pont ', PORT);
+  console.log('Listening on port ', PORT);
 });

@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "React App for managing Spotify Playlists",
   "main": "server/server.js",
-  "type": "module",
   "scripts": {
     "start": "node server/server.js",
     "server": "nodemon server/server.js",
