@@ -1,5 +1,5 @@
 {
-  "name": "Spotify Tool",
+  "name": "spotify-tool",
   "version": "1.0.0",
   "description": "React App for managing Spotify Playlists",
   "main": "server/server.js",
