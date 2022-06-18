@@ -12,7 +12,8 @@ import {
   PlayerContainer,
   Button,
   PageFooter,
-  StatusMessage
+  StatusMessage,
+  ButtonContainer
 } from './styles/Dashboard.styles';
 
 const spotifyApi = new SpotifyWebApi({
@@ -114,26 +115,28 @@ const Dashboard = ({ code }) => {
         cols={80}
         onChange={e => setArtistTitleText(e.target.value)}
       />
-      <Button
-        onClick={searchTitles}
-        disabled={artistTitleText.trim().length === 0}
-      >
-        Search Songs
-      </Button>
-      <Button
-        onClick={() => {
-          setArtistTitleText('');
-        }}
-        disabled={artistTitleText.trim().length === 0}
-      >
-        Clear
-      </Button>
-      <Button
-        onClick={convertFrom2Liners}
-        disabled={artistTitleText.trim().length === 0}
-      >
-        2 Liners
-      </Button>
+      <ButtonContainer>
+        <Button
+          onClick={searchTitles}
+          disabled={artistTitleText.trim().length === 0}
+        >
+          Search Songs
+        </Button>
+        <Button
+          onClick={() => {
+            setArtistTitleText('');
+          }}
+          disabled={artistTitleText.trim().length === 0}
+        >
+          Clear
+        </Button>
+        <Button
+          onClick={convertFrom2Liners}
+          disabled={artistTitleText.trim().length === 0}
+        >
+          2 Liners
+        </Button>
+      </ButtonContainer>
       <ResultsContainer>
         {searchResults.map(track => (
           <TrackSearchResult
@@ -150,14 +153,17 @@ const Dashboard = ({ code }) => {
         hidden={searchResults.length === 0}
         onChange={e => setPlaylistName(e.target.value)}
       />
-      <Button
-        onClick={createSpotifyPlaylist}
-        disabled={
-          searchResults.lastIndexOf === 0 || playlistName.trim().length === 0
-        }
-      >
-        Create Spotify Playlist
-      </Button>
+      <ButtonContainer>
+        <Button
+          onClick={createSpotifyPlaylist}
+          hidden={searchResults.length === 0}
+          disabled={
+            searchResults.lastIndexOf === 0 || playlistName.trim().length === 0
+          }
+        >
+          Create Spotify Playlist
+        </Button>
+      </ButtonContainer>
       <p />
       <StatusMessage>{statusMessage}</StatusMessage>
       <PageFooter />
