@@ -9,9 +9,11 @@ const useAuth = code => {
   useEffect(() => {
     (async () => {
       try {
+        const serviceUrl = process.env.REACT_APP_BASE_URL;
+        console.log(`Calling authentication service ${serviceUrl}`);
         const {
           data: { access_token, refresh_token, expires_in }
-        } = await axios.post(`${process.env.AUTH_SERVICE_URL}/login`, {
+        } = await axios.post(`${serviceUrl}/login`, {
           code
         });
         setAccessToken(access_token);
@@ -30,7 +32,7 @@ const useAuth = code => {
       try {
         const {
           data: { access_token, expires_in }
-        } = await axios.post(`${process.env.AUTH_SERVICE_URL}/refresh`, {
+        } = await axios.post(`${process.env.REACT_APP_BASE_URL}/refresh`, {
           refreshToken
         });
         setAccessToken(access_token);
