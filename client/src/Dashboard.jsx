@@ -4,17 +4,12 @@ import useAuth from './hooks/useAuth';
 import Player from './Player';
 import TrackSearchResult from './TrackSearchResult';
 import SpotifyWebApi from 'spotify-web-api-node';
-import {
-  DashBoardContainer,
-  PlaylistNameInput,
-  ArtistTitleInput,
-  ResultsContainer,
-  PlayerContainer,
-  Button,
-  PageFooter,
-  StatusMessage,
-  ButtonContainer
-} from './styles/Dashboard.styles';
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.REACT_APP_CLIENT_ID
@@ -104,25 +99,32 @@ const Dashboard = ({ code }) => {
     return () => (cancel = true);
   };
 
+  const hasResults = () => {
+    return searchResults && searchResults.length > 0;
+  };
+
   return (
-    <DashBoardContainer>
-      <h1>Create Spotify Playlist from Titles</h1>
-      <ArtistTitleInput
+    <Stack spacing={2}>
+      <Typography variant="h4">Create Spotify Playlist from Titles</Typography>
+      <TextField
         name="artistTitleInput"
         placeholder="Lines with Artist - Title"
         value={artistTitleText}
-        rows={15}
-        cols={80}
+        multiline
+        variant="outlined"
+        rows={10}
         onChange={e => setArtistTitleText(e.target.value)}
       />
-      <ButtonContainer>
+      <Box spacing={2} sx={{ flexDirection: 'row', m: 2 }}>
         <Button
+          variant="contained"
           onClick={searchTitles}
           disabled={artistTitleText.trim().length === 0}
         >
           Search Songs
         </Button>
         <Button
+          variant="contained"
           onClick={() => {
             setArtistTitleText('');
           }}
@@ -131,46 +133,45 @@ const Dashboard = ({ code }) => {
           Clear
         </Button>
         <Button
+          variant="contained"
           onClick={convertFrom2Liners}
           disabled={artistTitleText.trim().length === 0}
         >
           2 Liners
         </Button>
-      </ButtonContainer>
-      <ResultsContainer>
-        {searchResults.map(track => (
-          <TrackSearchResult
-            track={track[0]}
-            key={track[0].uri}
-            chooseTrack={chooseTrack}
+      </Box>
+
+      {searchResults && searchResults.length > 0 && (
+        <Stack spacing={2}>
+          {searchResults.map(track => (
+            <TrackSearchResult
+              track={track[0]}
+              key={track[0].uri}
+              chooseTrack={chooseTrack}
+            />
+          ))}
+          <TextField
+            type="text"
+            placeholder="Enter Spotify Playlist Name"
+            value={playlistName}
+            hidden={searchResults.length === 0}
+            onChange={e => setPlaylistName(e.target.value)}
           />
-        ))}
-      </ResultsContainer>
-      <PlaylistNameInput
-        type="text"
-        placeholder="Enter Spotify Playlist Name"
-        value={playlistName}
-        hidden={searchResults.length === 0}
-        onChange={e => setPlaylistName(e.target.value)}
-      />
-      <ButtonContainer>
-        <Button
-          onClick={createSpotifyPlaylist}
-          hidden={searchResults.length === 0}
-          disabled={
-            searchResults.lastIndexOf === 0 || playlistName.trim().length === 0
-          }
-        >
-          Create Spotify Playlist
-        </Button>
-      </ButtonContainer>
-      <p />
-      <StatusMessage>{statusMessage}</StatusMessage>
-      <PageFooter />
-      <PlayerContainer>
+          <Button
+            variant="contained"
+            disabled={playlistName.trim().length === 0}
+            onClick={createSpotifyPlaylist}
+          >
+            Create Spotify Playlist
+          </Button>
+        </Stack>
+      )}
+
+      <Typography>{statusMessage}</Typography>
+      <Container>
         <Player accessToken={accessToken} trackUri={playingTrack?.uri} />
-      </PlayerContainer>
-    </DashBoardContainer>
+      </Container>
+    </Stack>
   );
 };
 

@@ -1,12 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import GlobalStyles from './styles/globalStyles.styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark'
+  }
+});
 
 ReactDOM.render(
-  <>
-    <GlobalStyles />
+  <ThemeProvider theme={darkTheme}>
+    <CssBaseline />
     <App />
-  </>,
+  </ThemeProvider>,
   document.getElementById('root')
 );

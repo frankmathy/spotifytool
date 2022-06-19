@@ -1,6 +1,5 @@
 import React from 'react';
-
-import { ResultText } from './styles/TrackSearchResults.styles';
+import Typography from '@mui/material/Typography';
 
 const TrackSearchResult = ({ track, chooseTrack }) => {
   function handlePlay() {
@@ -8,9 +7,9 @@ const TrackSearchResult = ({ track, chooseTrack }) => {
   }
 
   return (
-    <ResultText onClick={handlePlay}>
+    <Typography onClick={handlePlay}>
       {track.artist} - {track.title}
-    </ResultText>
+    </Typography>
   );
 };
 
