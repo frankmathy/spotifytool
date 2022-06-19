@@ -115,7 +115,7 @@ const Dashboard = ({ code }) => {
         rows={10}
         onChange={e => setArtistTitleText(e.target.value)}
       />
-      <Box spacing={2} sx={{ flexDirection: 'row', m: 2 }}>
+      <Stack direction="row" spacing={2}>
         <Button
           variant="contained"
           onClick={searchTitles}
@@ -139,7 +139,7 @@ const Dashboard = ({ code }) => {
         >
           2 Liners
         </Button>
-      </Box>
+      </Stack>
 
       {searchResults && searchResults.length > 0 && (
         <Stack spacing={2}>
@@ -157,13 +157,15 @@ const Dashboard = ({ code }) => {
             hidden={searchResults.length === 0}
             onChange={e => setPlaylistName(e.target.value)}
           />
-          <Button
-            variant="contained"
-            disabled={playlistName.trim().length === 0}
-            onClick={createSpotifyPlaylist}
-          >
-            Create Spotify Playlist
-          </Button>
+          <Stack direction="row" spacing={2}>
+            <Button
+              variant="contained"
+              disabled={playlistName.trim().length === 0}
+              onClick={createSpotifyPlaylist}
+            >
+              Create Spotify Playlist
+            </Button>
+          </Stack>
         </Stack>
       )}
 
