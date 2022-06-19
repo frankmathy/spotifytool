@@ -104,7 +104,7 @@ const Dashboard = ({ code }) => {
   };
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={2} margin={2}>
       <Typography variant="h4">Create Spotify Playlist from Titles</Typography>
       <TextField
         name="artistTitleInput"
