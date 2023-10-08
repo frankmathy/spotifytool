@@ -2,7 +2,9 @@ const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const SpotifyWebApi = require('spotify-web-api-node');
-const dotenv = require('dotenv').config();
+const dotenv = require('dotenv').config({
+  path: `.env.${process.env.NODE_ENV}`,
+});
 const PORT = process.env.PORT || 3001;
 
 const app = express();
@@ -28,12 +30,12 @@ app.post('/login', async (req, res) => {
   const spotifyApi = new SpotifyWebApi({
     redirectUri: process.env.REDIRECT_URI,
     clientId: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET
+    clientSecret: process.env.CLIENT_SECRET,
   });
 
   try {
     const {
-      body: { access_token, refresh_token, expires_in }
+      body: { access_token, refresh_token, expires_in },
     } = await spotifyApi.authorizationCodeGrant(code);
     res.json({ access_token, refresh_token, expires_in });
   } catch (err) {
@@ -48,12 +50,12 @@ app.post('/refresh', async (req, res) => {
     redirectUri: process.env.REDIRECT_URI,
     clientId: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    refreshToken
+    refreshToken,
   });
 
   try {
     const {
-      body: { access_token, expires_in }
+      body: { access_token, expires_in },
     } = await spotifyApi.refreshAccessToken();
     res.json({ access_token, expires_in });
   } catch (err) {
@@ -62,7 +64,7 @@ app.post('/refresh', async (req, res) => {
   }
 });
 
-app.listen(PORT, err => {
+app.listen(PORT, (err) => {
   if (err) console.log(err);
   console.log('Listening on port ', PORT);
 });
